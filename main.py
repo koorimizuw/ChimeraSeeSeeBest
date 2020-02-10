@@ -4,7 +4,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
 import chromedriver_binary
 from cqpapi import API
-from constants import chuninet, chimera_id
+from constants import chuninet, chimera_id, sega_id, sega_pw
 
 """
 原谅我用中文写注释(X)
@@ -40,8 +40,8 @@ def main():
     account_box = driver.find_element_by_name('segaId')
     pw_box = driver.find_element_by_name('password')
 
-    account_box.send_keys('')  # ---你的segaID
-    pw_box.send_keys('')  # ---你的密码
+    account_box.send_keys(sega_id)
+    pw_box.send_keys(sega_pw)
     account_box.submit()
     time.sleep(0.5)
 
