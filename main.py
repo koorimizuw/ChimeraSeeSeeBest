@@ -1,4 +1,5 @@
 import time
+import json
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
@@ -26,12 +27,16 @@ def main():
         score_array = []
         for i in elements:
             music_name = i.text.split('\n')[0]
-            score = i.text.split('\n')[3]
+            score = i.text.split('\n')[3].replace(',', '')
             score_array.append({
                 'music': music_name,
-                'score': score
+                'score': int(score)
             })
         return score_array
+
+    def save_score(d):
+        with open('score.json', 'w') as f:
+            json.dump(d, f, indent=4)
 
     driver = webdriver.Chrome()
     driver.get(chuninet)
@@ -77,15 +82,16 @@ def main():
     lv14_list = get_score(driver.find_elements_by_class_name("bg_master"))
 
     score_list = lv13_list + lv13plus_list + lv14_list
+    save_score(score_list)
 
     score_msg = ''
     score_msg = score_msg + 'カードネーム：' + chimera_card_name + '\n'
     for i in score_list:
         score_msg = score_msg + '曲名：' + \
-            i['music'] + ' スコア：' + i['score'] + '\n'
-    print(score_msg)
+            i['music'] + ' スコア：' + str(i['score']) + '\n'
+    # print(score_msg)
 
-    api.send_msg(score_msg)
+    api.send_yama_msg(score_msg)
 
 
 if __name__ == '__main__':
